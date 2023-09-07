@@ -16,6 +16,7 @@ const Home = () => {
   const [favorite, setFavorite] = useState(false);
   const [open, setOpen] = useState(false);
   const [isMovieCreate, setIsMovieCreate] = useState(false)
+  const [isMovieDelete, setIsMovieDelete] = useState(false)
   
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -27,7 +28,7 @@ const Home = () => {
       .catch((err) => console.log(err));
       setDispatchLike(false)
       setIsMovieCreate(false)
-  }, [dispatchLike, isMovieCreate]);
+  }, [dispatchLike, isMovieCreate, isMovieDelete]);
 
   const handleLike = (movie) => {
     if (!movie.isLiked) {
@@ -53,6 +54,11 @@ const Home = () => {
   }; 
 
   const moviesFiltered = movies.filter(movie => movie.isLiked);
+  const deleteMovieById= (id)=> {
+    axios.delete(`http://localhost:5000/movies/${id}`)
+    .then(res => setIsMovieDelete(res))
+    .catch(err => console.log(err))
+  }
 
   return (
     <>
@@ -67,7 +73,9 @@ const Home = () => {
                 <CardMovie
                   movie={movie}
                   key={movie.id}
-                  handleLike={handleLike} />
+                  handleLike={handleLike}
+                  deleteMovieById= {deleteMovieById}
+                  />
                  
               )
             })
@@ -77,7 +85,9 @@ const Home = () => {
                 <CardMovie
                   movie={movie}
                   key={movie.id}
-                  handleLike={handleLike} />
+                  handleLike={handleLike}
+                  deleteMovieById= {deleteMovieById}
+                  />
                  
               )
             })
@@ -91,3 +101,6 @@ const Home = () => {
 export default Home;
 
 
+/**
+ * *CREATE (post) READ (get) UPDATE (put o patch) DELETE (delete) ---> CRUD ---> ABM (alta baja y modificación)
+ */
